@@ -50,14 +50,29 @@ function removeitem(e){
 }
 
 function clearitem(e){
-    alert("are you want to delete all")
-    while(itemList.firstChild){
-        itemList.removeChild(itemList.firstChild)
+    if(confirm("Are you want to delete All ?")){
+        while(itemList.firstChild){
+            itemList.removeChild(itemList.firstChild)
+        }
     }
+    checkUI()
+}
+
+function filterItem(e){
+    const items = itemList.querySelectorAll('li')
+    const text = e.target.value.toLowerCase();
+    items.forEach((item)=>{
+        const itemName = item.firstChild.textContent.toLowerCase();
+        if(itemName.indexOf(text)!=-1){
+            item.style.display='flex';
+        } else{
+            item.style.display='none'
+        }
+    })
 }
 
 function checkUI(){
-    const items = document.querySelectorAll('li')
+    const items = itemList.querySelectorAll('li')
     console.log(items)
     if(items.length===0){
         clearbtn.style.display='none'
@@ -72,4 +87,5 @@ function checkUI(){
 clearbtn.addEventListener('click',clearitem)
 itemList.addEventListener('click',removeitem)
 itemform.addEventListener('submit',additem)
+itemfilter.addEventListener('keydown',filterItem)
 checkUI()
