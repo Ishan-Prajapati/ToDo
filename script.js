@@ -5,24 +5,45 @@ const clearbtn = document.getElementById('clear')
 const itemfilter = document.getElementById('filter')
 
 
-function additem(e){
+function onAdditemsubmit(e){
     e.preventDefault();
     const newItem = itemInput.value;
     if(newItem ==''){
         alert("Please enter a value")
         return;
     }
-    // create list item 
-   const li = document.createElement('li')
-   li.appendChild(document.createTextNode(newItem));
+    // create list item DOM element
+   addItemToDOM(newItem);
+    
+   //   add items to storage 
+   additemtostorage(newItem);
+    checkUI()
+    itemInput.value=='';
+}
+
+function addItemToDOM(item){
+    const li = document.createElement('li')
+   li.appendChild(document.createTextNode(item));
     // create Button
     const button = createButton('remove-item btn-link text-red')
     const icon = createIcon('fa-solid fa-xmark')
     button.appendChild(icon)
     li.appendChild(button)
     itemList.append(li)
-    checkUI()
-    itemInput.value=='';
+}
+
+function additemtostorage(item){
+    let itemsfromstorage;
+    if(localStorage.getItem('items')===null){
+        itemsfromstorage = [];
+    }else 
+    {
+        itemsfromstorage = JSON.parse(localStorage.getItem('items'));
+    }
+    // add new item to array
+    itemsfromstorage.push(item);
+    // convert to JSON and set to localstorage
+    localStorage.setItem('items',JSON.stringify(itemsfromstorage))
 }
 
 function createButton(classes){
@@ -86,6 +107,6 @@ function checkUI(){
 
 clearbtn.addEventListener('click',clearitem)
 itemList.addEventListener('click',removeitem)
-itemform.addEventListener('submit',additem)
+itemform.addEventListener('submit',onAdditemsubmit)
 itemfilter.addEventListener('keydown',filterItem)
 checkUI()
