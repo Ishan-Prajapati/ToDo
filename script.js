@@ -73,17 +73,34 @@ function createIcon(classes){
     return icon;
 }
 
-function removeitem(e){
-   if(e.target.parentElement.classList.contains('remove-item')){
-    if(confirm("are you sure?")){
-
-        e.target.parentElement.parentElement.remove()
-        checkUI()
-    }
-    // console.log('click')
-   }
-  
+function onclickitem(e){
+    if(e.target.parentElement.classList.contains('remove-item')){
+        removeitem(e.target.parentElement.parentElement);
 }
+}
+
+function removeitem(item){
+    if(confirm("are you sure?")){
+    //    remove from dom
+        item.remove();
+
+        // remove from localstorage
+        removeitemfromstorage(item.textContent)
+
+        checkUI();
+    }
+}
+
+function removeitemfromstorage(item){
+    let itemsfromstorage = getitemfromstorage();
+    // console.log(itemsfromstorage)
+    // filter to removed 
+    itemsfromstorage = itemsfromstorage.filter( i => i!== item);
+
+    // re- set to localstorage
+    localStorage.setItem('items',JSON.stringify(itemsfromstorage))
+}
+
 
 function clearitem(e){
     if(confirm("Are you want to delete All ?")){
@@ -92,6 +109,7 @@ function clearitem(e){
         }
     }
     checkUI()
+    localStorage.removeItem('items')
 }
 
 function filterItem(e){
@@ -122,10 +140,15 @@ function checkUI(){
 function init(){
 
     clearbtn.addEventListener('click',clearitem)
-    itemList.addEventListener('click',removeitem)
+    itemList.addEventListener('click',onclickitem)
     itemform.addEventListener('submit',onAdditemsubmit)
-    itemfilter.addEventListener('keydown',filterItem)
+    itemfilter.addEventListener('keyup',filterItem)
     document.addEventListener('DOMContentLoaded',displayitems)
     checkUI()
 }
 init()
+// 
+// 
+// 
+// 
+// 
