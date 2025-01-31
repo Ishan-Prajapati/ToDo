@@ -4,6 +4,10 @@ const itemList = document.getElementById('item-list')
 const clearbtn = document.getElementById('clear')
 const itemfilter = document.getElementById('filter')
 
+function displayitems(){
+    const itemfromstorage = getitemfromstorage();
+    itemfromstorage.forEach((item) => addItemToDOM(item))
+}
 
 function onAdditemsubmit(e){
     e.preventDefault();
@@ -30,6 +34,17 @@ function addItemToDOM(item){
     button.appendChild(icon)
     li.appendChild(button)
     itemList.append(li)
+}
+
+function getitemfromstorage(){
+    let itemsfromstorage;
+    if(localStorage.getItem('items')===null){
+        itemsfromstorage = [];
+    }else 
+    {
+        itemsfromstorage = JSON.parse(localStorage.getItem('items'));
+    }
+    return itemsfromstorage;
 }
 
 function additemtostorage(item){
@@ -104,9 +119,13 @@ function checkUI(){
         itemfilter.style.display='block'
     }
 }
+function init(){
 
-clearbtn.addEventListener('click',clearitem)
-itemList.addEventListener('click',removeitem)
-itemform.addEventListener('submit',onAdditemsubmit)
-itemfilter.addEventListener('keydown',filterItem)
-checkUI()
+    clearbtn.addEventListener('click',clearitem)
+    itemList.addEventListener('click',removeitem)
+    itemform.addEventListener('submit',onAdditemsubmit)
+    itemfilter.addEventListener('keydown',filterItem)
+    document.addEventListener('DOMContentLoaded',displayitems)
+    checkUI()
+}
+init()
