@@ -26,6 +26,17 @@ function onAdditemsubmit(e){
     checkUI()
     itemInput.value=='';
 }
+//  check for edit mode 
+
+if(isEditmode){
+    const itemtoedit = itemList.querySelector('.edit-mode');
+
+    removeitemfromstorage(itemtoedit.textContent)
+    itemtoedit.classList.remove('edit-mode')
+    itemtoedit.remove(); 
+    isEditmode = false;
+
+}
 
 function addItemToDOM(item){
     const li = document.createElement('li')
@@ -102,8 +113,12 @@ function removeitem(item){
         // remove from localstorage
         removeitemfromstorage(item.textContent)
 
+        formbtn.innerHTML = '<i class = "fa-solid fa-plus"></i>Add item '
+        formbtn.style.backgroundColor = '#333'
+        isEditmode = 'false'
         checkUI();
     }
+    
 }
 
 function removeitemfromstorage(item){
@@ -141,6 +156,7 @@ function filterItem(e){
 }
 
 function checkUI(){
+    itemInput.value = ''
     const items = itemList.querySelectorAll('li')
     console.log(items)
     if(items.length===0){
@@ -151,6 +167,9 @@ function checkUI(){
         clearbtn.style.display='block'
         itemfilter.style.display='block'
     }
+    formbtn.innerHTML = '<i class="fa-solid fa-pen"></i>Add item '
+    formbtn.style.backgroundColor = "#333"
+    isEditmode = 'false';
 }
 function init(){
 
